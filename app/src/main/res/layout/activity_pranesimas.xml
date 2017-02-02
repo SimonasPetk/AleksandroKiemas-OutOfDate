@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.panevezioapp.Pranesimas">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_pranesimas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.example.android.panevezioapp.Pranesimas">
+
+
+        <ImageView
+            android:id="@+id/imgView"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="200dp"
+            app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonLoadPicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Įkelti"
+                android:onClick="loadImagefromGallery"
+                android:textAllCaps="true" />
+
+            <Button
+                android:id="@+id/Take_Photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="Fotografuoti"
+                android:textAllCaps="true" />
+
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/Name_Surname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/Upload"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Vardas, Pavardė"
+            android:inputType="textCapWords" />
+
+        <EditText
+            android:id="@+id/Email_Address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="El. Pašto Adresas"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Aprašymas"
+            android:inputType="textMultiLine" />
+
+    </LinearLayout>
+
+</ScrollView>
