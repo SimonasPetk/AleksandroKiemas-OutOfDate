@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_pranesimas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context="com.example.android.panevezioapp.Pranesimas">
 
@@ -31,7 +31,6 @@
                 android:id="@+id/buttonLoadPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:onClick="loadImagefromGallery"
                 android:text="Įkelti" />
 
@@ -39,7 +38,7 @@
                 android:id="@+id/Take_Photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:text="Fotografuoti"
 
                 android:textAllCaps="true" />
