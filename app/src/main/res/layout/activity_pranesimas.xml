@@ -30,10 +30,11 @@
             <Button
                 android:id="@+id/buttonLoadPicture"
                 android:layout_width="wrap_content"
+                android:text="Įkelti"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:onClick="loadImagefromGallery"
-                android:text="Įkelti" />
+                />
 
             <Button
                 android:id="@+id/Take_Photo"
