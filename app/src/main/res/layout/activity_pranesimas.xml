@@ -50,8 +50,6 @@
             android:id="@+id/Name_Surname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/Upload"
             android:layout_marginTop="20dp"
             android:ems="10"
             android:hint="Vardas, Pavardė"
