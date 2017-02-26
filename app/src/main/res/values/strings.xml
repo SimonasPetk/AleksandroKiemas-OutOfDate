@@ -2,9 +2,12 @@
     <string name="app_name">PanevezioAPP</string>
     <string name="unexpected_error">Something went wrong</string>
     <string name="no_image">You haven\'t picked Image</string>
-    <string name="upload_photo">Įkelti</string>
-    <string name="take_photo">Fotografuoti</string>
-    <string name="full_name">Vardas, Pavardė</string>
+    <string name="upload_photo">Įkelti Nuotrauką</string>
+    <string name="address">Problemos Adresas</string>
     <string name="email_address">El. Pašto Adresas</string>
     <string name="description">Aprašymas</string>
+    <string name="button_map">Žemėlapis</string>
+    <string name="title_activity_maps">Map</string>
+
+
 </resources>
