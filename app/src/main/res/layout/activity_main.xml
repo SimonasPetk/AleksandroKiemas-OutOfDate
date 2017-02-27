@@ -57,6 +57,19 @@
             android:hint="@string/description"
             android:inputType="textMultiLine" />
 
+        <com.arlib.floatingsearchview.FloatingSearchView
+            android:id="@+id/floating_search_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:floatingSearch_searchBarMarginLeft="0dp"
+            app:floatingSearch_searchBarMarginTop="0dp"
+            app:floatingSearch_searchBarMarginRight="0dp"
+            app:floatingSearch_searchHint="Search..."
+            app:floatingSearch_suggestionsListAnimDuration="250"
+            app:floatingSearch_showSearchKey="false"
+            app:floatingSearch_leftActionMode="showHamburger"
+            app:floatingSearch_close_search_on_keyboard_dismiss="true"/>
+
 
     </LinearLayout>
 
