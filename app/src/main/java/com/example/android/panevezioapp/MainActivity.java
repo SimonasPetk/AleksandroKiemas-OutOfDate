@@ -37,7 +37,6 @@ public class MainActivity extends Activity {
     private Button btnSelect;
     private ImageView ivImage;
     private String userChoosenTask;
-    private FloatingSearchView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +51,6 @@ public class MainActivity extends Activity {
             }
         });
         ivImage = (ImageView) findViewById(R.id.image_placeholder);
-        search = (FloatingSearchView) findViewById(R.id.floating_search_view);
-
-        search.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
-            @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
-
-                
-            }
-        });
     }
 
     @Override
@@ -90,7 +80,7 @@ public class MainActivity extends Activity {
                 break;
         }
     }
-    
+
     @SuppressWarnings("deprecation")
     private void onSelectFromGalleryResult(Intent data) {
 
