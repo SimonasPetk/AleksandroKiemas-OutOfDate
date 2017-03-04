@@ -8,6 +8,8 @@
     <string name="description">Aprašymas</string>
     <string name="button_map">Žemėlapis</string>
     <string name="title_activity_maps">Map</string>
+    <string name="google_api_key">AIzaSyCBQtRReV7hAUumc07eNh8t4vhboQZdXt4</string>
+
 
 
 </resources>

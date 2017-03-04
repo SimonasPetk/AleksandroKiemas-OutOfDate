@@ -22,17 +22,23 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+
+import static android.R.id.edit;
 
 
 public class MainActivity extends Activity {
 
     private static int RESULT_LOAD_IMG = 1;
     private String imgDecodableString;
-
+    private final int REQUEST_CODE_PLACEPICKER = 1;
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private Button btnSelect;
     private ImageView ivImage;
@@ -51,17 +57,40 @@ public class MainActivity extends Activity {
             }
         });
         ivImage = (ImageView) findViewById(R.id.image_placeholder);
+
+        EditText gotoButton = (EditText) findViewById(R.id.fullname_field);
+
+        gotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startPlacePickerActivity();
+            }
+        });
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onActivityResult( int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_FILE)
-                onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA)
-                onCaptureImageResult(data);
+        switch (requestCode) {
+            case 0:
+
+                super.onActivityResult(requestCode, resultCode, data);
+
+                if (resultCode == Activity.RESULT_OK) {
+                    if (requestCode == SELECT_FILE)
+                        onSelectFromGalleryResult(data);
+                    else if (requestCode == REQUEST_CAMERA)
+                        onCaptureImageResult(data);
+                }
+
+                break;
+
+            case 1:
+                if (requestCode == REQUEST_CODE_PLACEPICKER && resultCode == RESULT_OK) {
+                    displaySelectedPlaceFromPlacePicker(data);
+                }
+                break;
+
         }
     }
 
@@ -167,9 +196,31 @@ public class MainActivity extends Activity {
      * Called when the user clicks the Map button
      */
 
-    public void openMapActivity(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
+    private void startPlacePickerActivity() {
+        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+        // this would only work if you have your Google Places API working
 
+        try {
+            Intent intent = intentBuilder.build(this);
+            startActivityForResult( intent, REQUEST_CODE_PLACEPICKER);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    private void displaySelectedPlaceFromPlacePicker(Intent data) {
+        Place placeSelected = PlacePicker.getPlace(data, this);
+
+        String name = placeSelected.getName().toString();
+        String address = placeSelected.getAddress().toString();
+
+        EditText enterCurrentLocation = (EditText) findViewById(R.id.fullname_field);
+        enterCurrentLocation.setText(name + ", " + address);
+    }
+
+   // public void openMapActivity(View view) {
+      //  Intent intent = new Intent(this, MapsActivity.class);
+      //  startActivity(intent);
+
+  //  }
 }
