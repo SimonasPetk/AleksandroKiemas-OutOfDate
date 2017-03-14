@@ -11,27 +11,23 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-
-import static android.R.id.edit;
 
 
 public class MainActivity extends Activity {
@@ -41,7 +37,9 @@ public class MainActivity extends Activity {
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private Button btnSelect;
     private ImageView ivImage;
-    private String userChoosenTask;
+    private String userChoosenTask, name, address;
+    private EditText problemAddress;
+    int PLACE_PICKER_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +54,34 @@ public class MainActivity extends Activity {
             }
         });
         ivImage = (ImageView) findViewById(R.id.image_placeholder);
+        problemAddress = (EditText) findViewById(R.id.problem_address);
+
+        problemAddress.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createPicker();
+            }
+        });
+
 
     }
 
     @Override
-    public void onActivityResult( int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-            super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
 
-            if (resultCode == Activity.RESULT_OK) {
-                if (requestCode == SELECT_FILE)
-                    onSelectFromGalleryResult(data);
-                else if (requestCode == REQUEST_CAMERA)
-                    onCaptureImageResult(data);
-            }
-
-
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_FILE)
+                onSelectFromGalleryResult(data);
+            else if (requestCode == REQUEST_CAMERA)
+                onCaptureImageResult(data);
+            else if (requestCode == PLACE_PICKER_REQUEST)
+                openPlacePicker(data);
         }
+
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -139,12 +148,12 @@ public class MainActivity extends Activity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);//
-        startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
+        startActivityForResult(Intent.createChooser(intent, "Select File"), 0);
     }
 
     private void cameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
+        startActivityForResult(intent, 1);
     }
 
 
@@ -176,10 +185,39 @@ public class MainActivity extends Activity {
      * Called when the user clicks the Map button
      */
 
+    public void createPicker (){
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
-   public void openPlacePicker(View view) {
-    Intent intent = new Intent(this, Placepicker.class);
-       startActivity(intent);
+        try {
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
 
-  }
+    public void openPlacePicker(Intent data) {
+
+
+        // The user has selected a place. Extract the name and address.
+        final Place place = PlacePicker.getPlace(data, this);
+
+        final CharSequence name = place.getName();
+        final CharSequence address = place.getAddress();
+
+        problemAddress.setText(address);
+
+        String attributions = PlacePicker.getAttributions(data);
+        if (attributions == null) {
+            attributions = "";
+        }
+
+
+        // problemAddressBar.setText(name);
+
+        // problemAddressBar.setText(address);
+
+        // problemAddressBar.setText(Html.fromHtml(attributions));
+    }
 }

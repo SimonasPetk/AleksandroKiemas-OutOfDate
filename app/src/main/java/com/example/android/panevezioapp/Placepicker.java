@@ -2,7 +2,9 @@ package com.example.android.panevezioapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.widget.EditText;
@@ -44,26 +46,10 @@ public class Placepicker extends AppCompatActivity {
 
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == Activity.RESULT_OK) {
 
-            // The user has selected a place. Extract the name and address.
-            final Place place = PlacePicker.getPlace(data, this);
 
-            final CharSequence name = place.getName();
-            final CharSequence address = place.getAddress();
-            String attributions = PlacePicker.getAttributions(data);
-            if (attributions == null) {
-                attributions = "";
-            }
-
-
-           // problemAddressBar.setText(name);
-
-           // problemAddressBar.setText(address);
-
-           // problemAddressBar.setText(Html.fromHtml(attributions));
 
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 }
