@@ -30,16 +30,16 @@
             android:text="@string/upload_photo" />
 
         <EditText
-            android:id="@+id/fullname_field"
+            android:id="@+id/problem_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/Upload"
-            android:layout_marginTop="10dp"
             android:ems="10"
-            android:focusableInTouchMode="false"
+            android:editable="true"
+            android:layout_marginTop="10dp"
             android:hint="@string/address"
-            android:onClick="openMapActivity" />
+            android:onClick="openPlacePicker"/>
 
         <EditText
             android:id="@+id/email_address_field"
