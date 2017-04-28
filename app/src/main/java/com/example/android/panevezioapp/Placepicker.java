@@ -19,7 +19,6 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 public class Placepicker extends AppCompatActivity {
 
     int PLACE_PICKER_REQUEST = 1;
-    //EditText problemAddressBar = (EditText) findViewById(R.id.problem_address);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

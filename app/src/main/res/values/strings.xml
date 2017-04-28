@@ -1,14 +1,23 @@
 <resources>
-    <string name="app_name">PanevezioAPP</string>
+    <string name="app_name">Aleksandras Tvarkosi</string>
     <string name="unexpected_error">Something went wrong</string>
     <string name="no_image">You haven\'t picked Image</string>
     <string name="upload_photo">Įkelti Nuotrauką</string>
-    <string name="address">Problemos Adresas</string>
-    <string name="email_address">El. Pašto Adresas</string>
+    <string name="address">Pasirinkite adresą</string>
+    <string name="email_address">Elektroninis paštas</string>
     <string name="description">Aprašymas</string>
     <string name="button_map">Žemėlapis</string>
+    <string name="button_problem">Pranešti Problemą</string>
+    <string name="button_myproblems">Mano</string>
     <string name="title_activity_maps">Map</string>
     <string name="google_api_key">AIzaSyCBQtRReV7hAUumc07eNh8t4vhboQZdXt4</string>
+    <string name="title_activity_main_menu">MainMenu</string>
+    <string name="place">Vieta</string>
+    <string name="email_example">Vardenis@paštas.lt</string>
+    <string name="write_description">Aprašykite problemą</string>
+    <string name="empty"></string>
+    <string name="upload_problem">Įkelti pranešimą</string>
+
 
 
 </resources>

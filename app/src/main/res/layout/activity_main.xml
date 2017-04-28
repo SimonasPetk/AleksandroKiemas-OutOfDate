@@ -6,56 +6,128 @@
     tools:context="com.example.android.panevezioapp.MainActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="vertical"
         tools:context="com.example.android.panevezioapp.Pranesimas">
 
-
-        <ImageView
-            android:id="@+id/image_placeholder"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/ic_menu_report_image" />
+            android:background="#b7b7b7">
 
-        <Button
-            android:id="@+id/load_photo"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_add_a_photo_white_48dp" />
+
+            <ImageView
+                android:id="@+id/image_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/upload_photo" />
+            android:layout_marginTop="20dp"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_pin_drop_black_24dp"
+            android:text="@string/place"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/problem_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:editable="false"
+            android:ems="10"
+            android:hint="@string/address" />
+
+        <TextView
+            android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/Upload"
-            android:ems="10"
-            android:editable="true"
-            android:layout_marginTop="10dp"
-            android:hint="@string/address" />
+            android:layout_marginTop="15dp"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_email_black_24dp"
+            android:text="@string/email_address"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/email_address_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="@string/email_example"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/email_address"
-            android:inputType="textEmailAddress" />
+            android:layout_marginTop="15dp"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_description_black_24dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/description"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/description_field"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:ems="10"
-            android:hint="@string/description"
+            android:hint="@string/write_description"
             android:inputType="textMultiLine" />
 
+        <FrameLayout
+            android:id="@+id/load_photo"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/buttonshape">
+
+            <Button
+                style="@style/captionOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:drawableStart="@drawable/ic_add_to_photos_white_24dp"
+                android:drawablePadding="5dp"
+                android:text="@string/upload_photo"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btnPost"
+            android:layout_width="170dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/buttonshape2"
+            android:text="@string/upload_problem"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
     </LinearLayout>
 
