@@ -117,11 +117,7 @@ public class MainActivity extends Activity {
                 if (photo != null) {
                     new AsyncSendImage().execute("http://opendata.dashboard.lt/api/v2/resources");
                 } else {
-                    try {
-                        throw new RuntimeException("Viskas čia yra blogai...");
-                    } catch (RuntimeException e) {
-                        e.printStackTrace();
-                    }
+                    Toast.makeText(MainActivity.this,"Please upload photo", Toast.LENGTH_LONG).show();
                 }
             }
         });
