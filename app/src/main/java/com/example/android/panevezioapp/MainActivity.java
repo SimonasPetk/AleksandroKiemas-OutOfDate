@@ -116,6 +116,9 @@ public class MainActivity extends Activity {
 
 
 
+                boolean hasDrawable = (ivImage.getDrawable() != null);
+                if(hasDrawable) {
+                    // imageView has image in it
                     photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
 
                     if (photo != null) {
@@ -127,7 +130,11 @@ public class MainActivity extends Activity {
                             e.printStackTrace();
                         }
                     }
-
+                }
+                else {
+                    // no image assigned to image view
+                        Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
+                }
 
                     // Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
 

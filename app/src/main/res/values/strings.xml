@@ -18,5 +18,7 @@
     <string name="no_image">Jūs nepasirinkote nuotraukos!</string>
     <string name="google_api_key">AIzaSyCBQtRReV7hAUumc07eNh8t4vhboQZdXt4</string>
     <string name="empty"> </string>
-
+    <string name="about_text_one">\"Aleksandro kiemas\" - noro padėti savo miestui ir “Barclays” technologijų akademijos įkvėpta mobiliosios programėlės Panevėžiui idėja, kurios tikslai - skatinti bendruomeniškumą ir pilietiškumą, gyventojų įsitraukimą į savo miesto gyvenimą.</string>
+    <string name="about_text_two">Programėlė suteikia galimybę greitai ir lengvai pranešti apie problemas mieste, o savivaldybės darbuotojams - efektyviai jas spręsti. Veikimo principas - paprastas - nufotografuokite pastebėtą problemą (pvz.: nuvirtęs medis, neveikiantis šviesoforas) ir ji greitai pasieks miesto savivaldybės darbuotojus, kurie pasirūpins, kad problemos neliktų. Problemų žemėlapyje stebėkite fiksuojamas problemas, bendrajame lange ieškokite informacijos apie mieste vykstančius renginius ir savivaldybės organizuojamas apklausas.</string>
+    <string name="about_text_three"></string>
 </resources>
