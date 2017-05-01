@@ -57,6 +57,7 @@
             android:drawablePadding="5dp"
             android:drawableStart="@drawable/ic_map_white_24dp"
             android:text="@string/button_map"
+            android:onClick="openMap"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp" />

@@ -2,15 +2,11 @@ package com.example.android.panevezioapp;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
-
 
 
 public class MainMenu extends AppCompatActivity {
@@ -29,9 +25,8 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void openMap(View view) {
-        Intent intent = new Intent(this, MainMenu.class);
+        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.google.com/maps/d/u/0/viewer?mid=1FZbf1x4LEe514_WMNo2ePvJLn9I&ll=55.44853640706444%2C23.594292999999993&z=9"));
         startActivity(intent);
-
     }
 
     public void openAbout(View view) {
