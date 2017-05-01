@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -32,7 +31,6 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.vision.Frame;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -50,6 +48,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import static com.example.android.panevezioapp.MainActivity.photo;
 
 public class MainActivity extends Activity {
 
@@ -70,6 +70,7 @@ public class MainActivity extends Activity {
     static Bitmap photo;
     static String imageID;
     private static Context context;
+
 
     Details details;
 
@@ -95,6 +96,7 @@ public class MainActivity extends Activity {
         descriptionField = (EditText) findViewById(R.id.description_field);
         btnPost = (Button) findViewById(R.id.btnPost);
 
+
         btnSelect.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -112,15 +114,28 @@ public class MainActivity extends Activity {
                 emailAddress = emailAddressField.getText().toString();
                 description = descriptionField.getText().toString();
 
-                photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
 
-                if (photo != null) {
-                    new AsyncSendImage().execute("http://opendata.dashboard.lt/api/v2/resources");
-                } else {
-                    Toast.makeText(MainActivity.this,"Please upload photo", Toast.LENGTH_LONG).show();
-                }
+
+                    photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
+
+                    if (photo != null) {
+                        new AsyncSendImage().execute("http://opendata.dashboard.lt/api/v2/resources");
+                    } else {
+                        try {
+                            throw new RuntimeException("Viskas čia yra blogai...");
+                        } catch (RuntimeException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                    // Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
+
+
             }
         });
+
+
 
         context = getApplicationContext();
 
@@ -220,9 +235,12 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
 
-            //Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
+            // Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
 
-            Toast.makeText(getBaseContext(), "Pranešimas nusiųstas!", Toast.LENGTH_LONG).show();
+           Toast.makeText(getBaseContext(), "Pranešimas nusiųstas!", Toast.LENGTH_LONG).show();
+
+
+
         }
     }
 
@@ -464,8 +482,13 @@ public class MainActivity extends Activity {
         final CharSequence address = place.getAddress();
         final LatLng location = place.getLatLng();
 
+        String locations = null;
 
-        problemAddressField.setText(name);
+
+        problemAddressField.setText(address);
+
+        //problemAddressField.setText(name);
+        //Toast.makeText(getBaseContext(),  data, Toast.LENGTH_LONG).show();
 
         String attributions = PlacePicker.getAttributions(data);
         if (attributions == null) {
@@ -475,11 +498,6 @@ public class MainActivity extends Activity {
 
     }
 
-
-    public void openMainMenu(View view) {
-        Intent intent = new Intent(this, MainMenu.class);
-        startActivity(intent);
-    }
 
     private int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -530,5 +548,7 @@ public class MainActivity extends Activity {
         int height = size.y;
         return decodeSampledBitmap(pathName, width, height);
     }
+
+
 
 }

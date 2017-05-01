@@ -2,57 +2,91 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginEnd="20dp"
+    android:layout_marginStart="20dp"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:background="@drawable/icon_logo"/>
 
-    <Button
+
+    <FrameLayout
         android:id="@+id/problem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="@drawable/buttonshape"
-        android:drawablePadding="5dp"
-        android:drawableStart="@drawable/ic_rate_review_white_24dp"
-        android:paddingLeft="70dp"
-        android:paddingRight="70dp"
-        android:text="@string/button_problem"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp" />
+        android:onClick="openProblems">
 
-    <Button
+        <Button
+            style="@style/captionOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_rate_review_white_24dp"
+            android:text="@string/button_problem"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </FrameLayout>
+
+
+    <FrameLayout
         android:id="@+id/map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="@drawable/buttonshape"
-        android:drawablePadding="5dp"
-        android:drawableStart="@drawable/ic_map_white_24dp"
-        android:paddingLeft="97dp"
-        android:paddingRight="97dp"
-        android:text="@string/button_map"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp" />
+        android:onClick="openMap">
 
-    <Button
-        android:id="@+id/mine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <Button
+            style="@style/captionOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_map_white_24dp"
+            android:text="@string/button_map"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/about"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="@drawable/buttonshape"
-        android:drawablePadding="5dp"
-        android:drawableStart="@drawable/ic_people_white_24dp"
-        android:gravity="center"
-        android:paddingLeft="112dp"
-        android:paddingRight="112dp"
-        android:text="@string/button_myproblems"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp" />
+        android:onClick="openAbout">
+
+        <Button
+            style="@style/captionOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_people_white_24dp"
+            android:text="@string/button_about"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </FrameLayout>
 
 
 </LinearLayout>

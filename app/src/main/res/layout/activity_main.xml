@@ -24,12 +24,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/ic_add_a_photo_white_48dp" />
+                android:background="@drawable/ic_add_a_photo_white_48dp"
+                android:contentDescription="@string/empty"/>
 
             <ImageView
                 android:id="@+id/image_placeholder"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:contentDescription="@string/empty"/>
 
         </RelativeLayout>
 
@@ -107,8 +109,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="5dp"
-                android:drawableStart="@drawable/ic_add_to_photos_white_24dp"
                 android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_add_to_photos_white_24dp"
                 android:text="@string/upload_photo"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
