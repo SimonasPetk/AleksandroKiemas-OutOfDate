@@ -122,7 +122,7 @@ public class MainActivity extends Activity {
                     photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
 
                     if (photo != null) {
-                        new AsyncSendImage().execute("http://opendata.dashboard.lt/api/v2/resources");
+                        new AsyncSendImage().execute("http://opendata.dashboard.lt/api/v1/resources");
                     } else {
                         try {
                             throw new RuntimeException("Viskas čia yra blogai...");
@@ -201,6 +201,10 @@ public class MainActivity extends Activity {
 
             // 4. set httpPost Entity
             httpPost.setEntity(me);
+
+
+            // 4.1 Set some headers to inform server about the type of the content
+            httpPost.setHeader("Hc-Token", "1rvoMjgZNb7U7sZlQTfkX1DweiqWGsvM8kiep8ueETdM4cqpUDqKyJPCkESdtk2eP2uw4PfMvFTxtQVX28mObQgZAcJobqj6V19APr9tbRZv7qskTcPUhBydK5gkBoavQtIhwLIQJl88OnH34Z9AI5ucHdMwx0kOw00SRKLcfu9CvrunA4hVSzZM3dktaxEKWR2pMNalC5YzJWb8tn2Ap7DR4PBI3zXm9pl17anslBMZ31bTK9JLfuMWZ2l1PQK");
 
             httpPost.toString();
 
@@ -287,6 +291,8 @@ public class MainActivity extends Activity {
             // 6. Set some headers to inform server about the type of the content
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
+            httpPost.setHeader("Hc-Token", "1rvoMjgZNb7U7sZlQTfkX1DweiqWGsvM8kiep8ueETdM4cqpUDqKyJPCkESdtk2eP2uw4PfMvFTxtQVX28mObQgZAcJobqj6V19APr9tbRZv7qskTcPUhBydK5gkBoavQtIhwLIQJl88OnH34Z9AI5ucHdMwx0kOw00SRKLcfu9CvrunA4hVSzZM3dktaxEKWR2pMNalC5YzJWb8tn2Ap7DR4PBI3zXm9pl17anslBMZ31bTK9JLfuMWZ2l1PQK");
+
 
             // 7. Execute POST request to the given URL
             HttpResponse httpResponse = httpclient.execute(httpPost);
