@@ -9,10 +9,10 @@
     <string name="email_example">Vardenis@paštas.lt</string>
     <string name="description">Aprašymas</string>
     <string name="write_description">Aprašykite problemą</string>
-    <string name="upload_photo">Įkelti Nuotrauką</string>
+    <string name="upload_photo">Įkelti nuotrauką</string>
     <string name="upload_problem">Įkelti pranešimą</string>
     <string name="button_map">Žemėlapis</string>
-    <string name="button_problem">Pranešti Problemą</string>
+    <string name="button_problem">Pranešti problemą</string>
     <string name="button_about">Apie aplikaciją</string>
     <string name="unexpected_error">Atsitiko klaida. Bandykite dar kartą</string>
     <string name="no_image">Jūs nepasirinkote nuotraukos!</string>

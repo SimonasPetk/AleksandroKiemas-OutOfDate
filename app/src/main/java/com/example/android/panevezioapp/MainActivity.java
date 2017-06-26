@@ -142,8 +142,6 @@ public class MainActivity extends Activity {
             }
         });
 
-
-
         context = getApplicationContext();
 
     }
@@ -247,12 +245,19 @@ public class MainActivity extends Activity {
         protected void onPostExecute(String result) {
 
             // Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
+            //
 
-           Toast.makeText(getBaseContext(), "Pranešimas nusiųstas!", Toast.LENGTH_LONG).show();
+            openAbout(btnPost);
 
+            Toast.makeText(getBaseContext(), "Pranešimas nusiųstas!", Toast.LENGTH_LONG).show();
 
 
         }
+    }
+
+    public void openAbout(View view) {
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
     }
 
     public static String POST(String url, Details details) {

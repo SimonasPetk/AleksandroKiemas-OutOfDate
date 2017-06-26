@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginEnd="20dp"
     android:layout_marginStart="20dp"
     android:orientation="vertical"
-    tools:context="com.example.android.panevezioapp.Menu">
+    tools:context="com.example.android.panevezioapp.LauncherActivity">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:background="@drawable/circl250" />
 
     <FrameLayout
         android:id="@+id/cleaning"
@@ -32,6 +38,7 @@
 
     </FrameLayout>
 
+
     <FrameLayout
         android:id="@+id/invites"
         android:layout_width="match_parent"
@@ -39,7 +46,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="@drawable/buttonshape"
-        android:onClick="openProblems">
+        android:onClick="openInvite">
 
         <Button
             style="@style/captionOnly"
@@ -55,28 +62,6 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/offers"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/buttonshape"
-        android:onClick="openProblems">
-
-        <Button
-            style="@style/captionOnly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="5dp"
-            android:drawablePadding="5dp"
-            android:text="#Siūlo"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
-    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/asks"
@@ -85,7 +70,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="@drawable/buttonshape"
-        android:onClick="openProblems">
+        android:onClick="openAsks">
 
         <Button
             style="@style/captionOnly"
@@ -100,7 +85,5 @@
             android:textSize="18sp" />
 
     </FrameLayout>
-
-
 
 </LinearLayout>

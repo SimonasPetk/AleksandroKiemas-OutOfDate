@@ -13,12 +13,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:background="@drawable/icon_logo"
-            android:contentDescription="App'so logo, savivaldybes logo and stuff" />
+            android:layout_margin="20dp"
+            android:background="@drawable/circl250" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,19 +30,45 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:text="@string/about_text_two"
             android:textAlignment="center"
             android:textSize="17sp" />
-        <TextView
-            android:layout_width="wrap_content"
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_gravity="center"
-            android:text="@string/about_text_three"
-            android:textAlignment="center"
-            android:textSize="17sp" />
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignStart="@id/email"
+                android:layout_marginStart="70dp"
+                android:background="@drawable/facebook"
+                android:onClick="openFacebook" />
+
+            <ImageView
+                android:id="@+id/email"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/email"
+                android:onClick="openEmail" />
+
+            <ImageView
+                android:id="@+id/instagram"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignEnd="@+id/email"
+                android:layout_marginEnd="70dp"
+                android:background="@drawable/instagram"
+                android:onClick="openInstagram" />
+
+        </RelativeLayout>
 
 
     </LinearLayout>

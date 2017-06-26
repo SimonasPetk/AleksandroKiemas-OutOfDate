@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/ic_add_a_photo_white_48dp"
+                android:background="@drawable/ic_photo_size_select_actual_white_48dp"
                 android:contentDescription="@string/empty"/>
 
             <ImageView
