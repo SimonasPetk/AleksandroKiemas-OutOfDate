@@ -1,4 +1,4 @@
-package com.example.android.panevezioapp;
+package lt.aleksandrokiemas;
 
 import android.Manifest;
 import android.annotation.TargetApi;

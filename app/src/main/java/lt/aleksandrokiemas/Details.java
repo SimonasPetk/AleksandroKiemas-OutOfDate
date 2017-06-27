@@ -1,6 +1,4 @@
-package com.example.android.panevezioapp;
-
-import static android.R.attr.name;
+package lt.aleksandrokiemas;
 
 /**
  * Created by Simonas Petkevičius on 2017-04-25.

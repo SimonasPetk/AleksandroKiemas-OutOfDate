@@ -1,4 +1,4 @@
-package com.example.android.panevezioapp;
+package lt.aleksandrokiemas;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

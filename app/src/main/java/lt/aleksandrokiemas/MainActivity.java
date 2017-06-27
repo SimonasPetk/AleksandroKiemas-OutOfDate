@@ -1,4 +1,4 @@
-package com.example.android.panevezioapp;
+package lt.aleksandrokiemas;
 
 
 import android.app.Activity;
@@ -14,8 +14,10 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -49,8 +51,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static com.example.android.panevezioapp.MainActivity.photo;
-
 public class MainActivity extends Activity {
 
     private static int RESULT_LOAD_IMG = 1;
@@ -74,6 +74,7 @@ public class MainActivity extends Activity {
 
     Details details;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +100,8 @@ public class MainActivity extends Activity {
 
         btnSelect.setOnClickListener(new OnClickListener() {
 
+
+
             @Override
             public void onClick(View v) {
                 selectImage();
@@ -115,9 +118,8 @@ public class MainActivity extends Activity {
                 description = descriptionField.getText().toString();
 
 
-
                 boolean hasDrawable = (ivImage.getDrawable() != null);
-                if(hasDrawable) {
+                if (hasDrawable) {
                     // imageView has image in it
                     photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
 
@@ -130,17 +132,23 @@ public class MainActivity extends Activity {
                             e.printStackTrace();
                         }
                     }
-                }
-                else {
+                } else {
                     // no image assigned to image view
-                        Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
                 }
 
-                    // Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
 
 
             }
         });
+
+        if (checkSelfPermission(android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{android.Manifest.permission.CAMERA},
+                    1);
+        }
+
 
         context = getApplicationContext();
 
@@ -362,6 +370,16 @@ public class MainActivity extends Activity {
                 } else {
                     //code for deny
                 }
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (userChoosenTask.equals("Fotografuoti"))
+                        cameraIntent();
+                    else if (userChoosenTask.equals("Pasirinkti iš galerijos"))
+                        galleryIntent();
+                } else {
+                    //code for deny
+                }
+
                 break;
         }
     }
@@ -391,6 +409,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 boolean result = Utility.checkPermission(MainActivity.this);
+
 
                 if (items[item].equals("Fotografuoti")) {
                     userChoosenTask = "Fotografuoti";
@@ -566,7 +585,6 @@ public class MainActivity extends Activity {
         int height = size.y;
         return decodeSampledBitmap(pathName, width, height);
     }
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.example.android.panevezioapp;
+package lt.aleksandrokiemas;
 
 import android.app.ActionBar;
 import android.content.Intent;
