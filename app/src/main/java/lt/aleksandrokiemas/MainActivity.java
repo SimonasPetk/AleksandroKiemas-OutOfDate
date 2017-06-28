@@ -49,11 +49,16 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
 import pl.tajchert.nammu.PermissionCallback;
 
-import static android.R.attr.permission;
+import static android.os.Build.VERSION_CODES.M;
 
 public class MainActivity extends Activity {
 
 
+    String[] PERMISSIONS = new String[]{
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
     private FrameLayout btnSelect;
     private ImageView ivImage;
     private String userChoosenTask, name, address;
@@ -86,7 +91,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -101,7 +106,7 @@ public class MainActivity extends Activity {
         btnPost = (Button) findViewById(R.id.btnPost);
 
 
-         btnSelect.setOnClickListener(new OnClickListener() {
+        btnSelect.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -146,6 +151,7 @@ public class MainActivity extends Activity {
         });
 
         context = getApplicationContext();
+        Nammu.init(getApplicationContext());
 
     }
 
@@ -381,25 +387,17 @@ public class MainActivity extends Activity {
     }
 
 
-
-
     private void selectImage() {
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            EasyImage.openChooserWithGallery(this, "Pasirinkite įkėlimo būdą", 0);
-        } else {
-            Nammu.askForPermission(this, Manifest.permission.CAMERA, new PermissionCallback() {
-                @Override
-                public void permissionGranted() {
-                    selectImage();
-                }
+        Nammu.askForPermission(this, PERMISSIONS, new PermissionCallback() {
+            @Override
+            public void permissionGranted() {
+                EasyImage.openChooserWithGallery(MainActivity.this, "Pasirinkite įkėlimo būdą", 0);
+            }
 
-                @Override
-                public void permissionRefused() {
-                    finish();
-                }
-            });
-        }
+            @Override
+            public void permissionRefused() {
+            }
+        });
 
 
     }
