@@ -41,9 +41,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
@@ -54,7 +54,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class MainActivity extends Activity {
 
-
+    List<String> resources = Arrays.asList(imageID);
     String[] PERMISSIONS = new String[]{
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -63,11 +63,11 @@ public class MainActivity extends Activity {
     private FrameLayout btnSelect;
     private ImageView ivImage;
     private String userChoosenTask, name, address;
-    private EditText problemAddressField;
+    private EditText lat;
     int PLACE_PICKER_REQUEST = 2;
     private long mLastClickTime = 0;
 
-    EditText emailAddressField, descriptionField;
+    EditText reporterEmail, comment;
     String problemAddress, emailAddress, description;
     Button btnPost;
 
@@ -89,7 +89,6 @@ public class MainActivity extends Activity {
         Nammu.init(getApplicationContext());
 
 
-
         // Change base URL to your upload server URL.
         service = new Retrofit.Builder().baseUrl("http://opendata.dashboard.lt/api/v1")
                 .addConverterFactory(MoshiConverterFactory.create())
@@ -100,11 +99,12 @@ public class MainActivity extends Activity {
         btnPost = (Button) findViewById(R.id.btnPost);
 
         ivImage = (ImageView) findViewById(R.id.image_placeholder);
-        problemAddressField = (EditText) findViewById(R.id.problem_address);
-        emailAddressField = (EditText) findViewById(R.id.email_address_field);
-        descriptionField = (EditText) findViewById(R.id.description_field);
+        lat = (EditText) findViewById(R.id.problem_address);
+        reporterEmail = (EditText) findViewById(R.id.email_address_field);
+        comment = (EditText) findViewById(R.id.description_field);
 
-        problemAddressField.setOnClickListener(new OnClickListener() {
+
+        lat.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -132,9 +132,12 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                problemAddress = problemAddressField.getText().toString();
-                emailAddress = emailAddressField.getText().toString();
-                description = descriptionField.getText().toString();
+                IssueRequest issuerequest = new IssueRequest(
+                        resources,
+                        reporterEmail.getText().toString(),
+                        comment.getText().toString(),
+                        lat.getText().toString()
+                );
 
 
                 boolean hasDrawable = (ivImage.getDrawable() != null);
@@ -166,7 +169,6 @@ public class MainActivity extends Activity {
 
     }
 
-    
 
     private class AsyncSendImage extends AsyncTask<String, Void, String> {
         @Override
@@ -443,7 +445,7 @@ public class MainActivity extends Activity {
         String locations = null;
 
 
-        problemAddressField.setText(address);
+        lat.setText(address);
 
         //problemAddressField.setText(name);
         //Toast.makeText(getBaseContext(),  data, Toast.LENGTH_LONG).show();

@@ -1,8 +1,5 @@
 package lt.aleksandrokiemas;
 
-import android.content.res.Resources;
-
-import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -20,9 +17,9 @@ import retrofit2.http.Part;
 interface ApiService {
     @Multipart
     @POST("/resources")
-    Call<ImageUploadResponse> postImage(@Part MultipartBody.Part image);
+    Call<ImageUploadResponse> createImage(@Part MultipartBody.Part image);
 
     @POST("/issues")
-    Call<ResponseBody> postData(@Body IssueRequest postBody);
+    Call<ResponseBody> createIssue(@Body IssueRequest postBody);
 }
 

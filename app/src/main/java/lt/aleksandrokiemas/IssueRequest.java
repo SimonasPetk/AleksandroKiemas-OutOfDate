@@ -6,14 +6,6 @@ import java.util.List;
  * Created by Simonas Petkevičius on 2017-06-28.
  */
 
-class ImageUploadResponse {
-    private String id;
-
-    public String getId() {
-        return id;
-    }
-}
-
 class IssueRequest{
 
     private List<String> resources;
