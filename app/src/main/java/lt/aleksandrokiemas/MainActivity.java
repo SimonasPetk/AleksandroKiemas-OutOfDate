@@ -2,13 +2,9 @@ package lt.aleksandrokiemas;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -22,24 +18,8 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -61,107 +41,27 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class MainActivity extends Activity {
 
-    static Bitmap photo;
-    static String imageID;
-    String[] resources = null;
+
     String[] PERMISSIONS = new String[]{
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
     };
     int PLACE_PICKER_REQUEST = 2;
     EditText reporterEmailEditText, descriptionEditText;
-    String problemAddress, emailAddress, description;
     Button btnPost;
     ApiService service;
-    Details details;
     private FrameLayout btnSelect;
     private ImageView ivImage;
-    private String userChoosenTask, name, address;
     private EditText addressEditText;
     private long mLastClickTime = 0;
     private File imageFile;
-    private Context context;
-
-    public static String POST(String url, Details details) {
-        InputStream inputStream = null;
-        String result = "";
-        try {
-
-            // 1. create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
-
-            // 2. make POST request to the given URL
-            HttpPost httpPost = new HttpPost(url);
-
-            String json = "{";
-
-            // 3. build jsonObject
-
-            json += "\"resources\":[\"";
-            json += imageID;
-            json += "\"],\"";
-            json += "reporter_email\":\"";
-            json += details.getEmailAddress();
-            json += "\",\"descriptionEditText\":\"";
-            json += details.getDescription();
-            json += "\",\"addressEditText\":\"";
-            json += "0";
-            json += "\"}";
 
 
-            // 4. set json to StringEntity
-            StringEntity se = new StringEntity(json);
-
-            // 5. set httpPost Entity
-            httpPost.setEntity(se);
-
-            // 6. Set some headers to inform server about the type of the content
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-type", "application/json");
-            httpPost.setHeader("Hc-Token", "1rvoMjgZNb7U7sZlQTfkX1DweiqWGsvM8kiep8ueETdM4cqpUDqKyJPCkESdtk2eP2uw4PfMvFTxtQVX28mObQgZAcJobqj6V19APr9tbRZv7qskTcPUhBydK5gkBoavQtIhwLIQJl88OnH34Z9AI5ucHdMwx0kOw00SRKLcfu9CvrunA4hVSzZM3dktaxEKWR2pMNalC5YzJWb8tn2Ap7DR4PBI3zXm9pl17anslBMZ31bTK9JLfuMWZ2l1PQK");
-
-
-            // 7. Execute POST request to the given URL
-            HttpResponse httpResponse = httpclient.execute(httpPost);
-
-            // 8. receive response as inputStream
-            inputStream = httpResponse.getEntity().getContent();
-
-
-            // 9. convert inputstream to string
-            if (inputStream != null) {
-                result = convertInputStreamToString(inputStream);
-            } else
-                result = "Nesuveikė!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
-        }
-
-        // 10. return result
-
-        return result;
-    }
-
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = "";
-        String result = "";
-        while ((line = bufferedReader.readLine()) != null)
-            result += line;
-
-        inputStream.close();
-        return result;
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        context = getApplicationContext();
         Nammu.init(getApplicationContext());
 
 
@@ -231,11 +131,8 @@ public class MainActivity extends Activity {
                 } else {
                     createIssue(null);
                 }
-
             }
         });
-
-
     }
 
     public void createIssue(String imageID) {
@@ -258,81 +155,18 @@ public class MainActivity extends Activity {
 
                 Toast.makeText(getBaseContext(), "Pranešimas nusiųstas!", Toast.LENGTH_LONG).show();
 
+                finish();
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                 Toast.makeText(getBaseContext(), "Pranešimo nusiųsti nepavyko...", Toast.LENGTH_LONG).show();
-
             }
         });
 
     }
 
-    public String POST_IMAGE(String url, Bitmap bitmap) {
-        InputStream inputStream = null;
-        String result = "";
-        try {
-
-            // 1. create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
-
-            // 2. make POST request to the given URL
-            HttpPost httpPost = new HttpPost(url);
-
-            // 3. set json to StringEntity
-
-            File file = new File(MainActivity.this.getFilesDir(), "image.jpg");
-            FileOutputStream fileos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileos);
-
-            org.apache.http.entity.mime.MultipartEntity me = new org.apache.http.entity.mime.MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-            me.addPart("file", new FileBody(file));
-
-            if (!file.exists()) {
-                try {
-                    throw new RuntimeException("Tu dorns...");
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // 4. set httpPost Entity
-            httpPost.setEntity(me);
-
-
-            // 4.1 Set some headers to inform server about the type of the content
-            httpPost.setHeader("Hc-Token", "1rvoMjgZNb7U7sZlQTfkX1DweiqWGsvM8kiep8ueETdM4cqpUDqKyJPCkESdtk2eP2uw4PfMvFTxtQVX28mObQgZAcJobqj6V19APr9tbRZv7qskTcPUhBydK5gkBoavQtIhwLIQJl88OnH34Z9AI5ucHdMwx0kOw00SRKLcfu9CvrunA4hVSzZM3dktaxEKWR2pMNalC5YzJWb8tn2Ap7DR4PBI3zXm9pl17anslBMZ31bTK9JLfuMWZ2l1PQK");
-
-            httpPost.toString();
-
-            // 5. Execute POST request to the given URL
-            HttpResponse httpResponse = httpclient.execute(httpPost);
-
-            // 6. receive response as inputStream
-            inputStream = httpResponse.getEntity().getContent();
-
-
-            // 7. convert inputstream to string
-            if (inputStream != null) {
-                result = convertInputStreamToString(inputStream);
-            } else
-                result = "Nesuveikė!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
-        }
-
-        // 8. return result
-
-        return result;
-    }
-
-    public void openAbout(View view) {
-        Intent intent = new Intent(this, MainMenu.class);
-        startActivity(intent);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -366,8 +200,6 @@ public class MainActivity extends Activity {
             if (requestCode == PLACE_PICKER_REQUEST)
                 openPlacePicker(data);
         }
-
-
     }
 
     @Override
@@ -387,8 +219,6 @@ public class MainActivity extends Activity {
             public void permissionRefused() {
             }
         });
-
-
     }
 
     /**
@@ -400,88 +230,17 @@ public class MainActivity extends Activity {
 
         try {
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
     }
 
     public void openPlacePicker(Intent data) {
-
-
         // The user has selected a place. Extract the name and address.
-        final Place place = PlacePicker.getPlace(data, this);
+        final Place place = PlacePicker.getPlace(this, data);
 
-        final CharSequence name = place.getName();
         final CharSequence address = place.getAddress();
-        final LatLng location = place.getLatLng();
-
-        String locations = null;
-
 
         addressEditText.setText(address);
-
-        //problemAddressField.setText(name);
-        //Toast.makeText(getBaseContext(),  data, Toast.LENGTH_LONG).show();
-
-        String attributions = PlacePicker.getAttributions(data);
-        if (attributions == null) {
-            attributions = "";
-        }
-
-
     }
-
-    private class AsyncSendImage extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-
-            return POST_IMAGE(urls[0], photo);
-        }
-
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                imageID = jsonObject.getString("id");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            //Toast.makeText(getBaseContext(), imageID, Toast.LENGTH_LONG).show();
-
-            new AsyncSendComment().execute("http://opendata.dashboard.lt/api/v1/issues");
-        }
-    }
-
-    private class AsyncSendComment extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-
-            details = new Details();
-            details.setProblemAddress(problemAddress);
-            details.setEmailAddress(emailAddress);
-            details.setDescription(description);
-
-            return POST(urls[0], details);
-        }
-
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-
-            // Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
-            //
-
-            openAbout(btnPost);
-
-            Toast.makeText(getBaseContext(), "Pranešimas nusiųstas!", Toast.LENGTH_LONG).show();
-
-
-        }
-    }
-
-
 }
