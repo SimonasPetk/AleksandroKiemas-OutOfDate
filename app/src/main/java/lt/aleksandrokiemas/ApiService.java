@@ -16,10 +16,10 @@ import retrofit2.http.Part;
 
 interface ApiService {
     @Multipart
-    @POST("/resources")
+    @POST("/api/v1/resources")
     Call<ImageUploadResponse> createImage(@Part MultipartBody.Part image);
 
-    @POST("/issues")
+    @POST("/api/v1/issues")
     Call<ResponseBody> createIssue(@Body IssueRequest postBody);
 }
 

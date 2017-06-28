@@ -41,8 +41,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -69,6 +74,7 @@ public class MainActivity extends Activity {
     private EditText addressEditText;
     int PLACE_PICKER_REQUEST = 2;
     private long mLastClickTime = 0;
+    private File imageFile;
 
     EditText reporterEmailEditText, descriptionEditText;
     String problemAddress, emailAddress, description;
@@ -94,7 +100,7 @@ public class MainActivity extends Activity {
 
 
         // Change base URL to your upload server URL.
-        service = new Retrofit.Builder().baseUrl("http://opendata.dashboard.lt/api/v1/")
+        service = new Retrofit.Builder().baseUrl("http://opendata.dashboard.lt/")
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
                 .create(ApiService.class);
@@ -134,11 +140,37 @@ public class MainActivity extends Activity {
 
         btnPost.setOnClickListener(new OnClickListener() {
 
+
+
             @Override
             public void onClick(View v) {
 
+                MultipartBody.Part body =
+                        MultipartBody.Part.createFormData("file", imageFile.getName(), RequestBody.create(MediaType.parse("image"),imageFile));
+
+                service.createImage(body).enqueue(new Callback<ImageUploadResponse>() {
+                    @Override
+                    public void onResponse(Call<ImageUploadResponse> call, Response<ImageUploadResponse> response) {
+
+                        Toast.makeText(getBaseContext(), "Nuotrauka nusiųstas!", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ImageUploadResponse> call, Throwable t) {
+
+                        Toast.makeText(getBaseContext(), "Nuotraukos nusiųsti nepavyko...", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                List <String> resources = new ArrayList<String>();
+
+                if(imageID != null)
+                {
+                    resources = Arrays.asList(imageID);
+                }
+
                 IssueRequest issuerequest = new IssueRequest(
-                        Arrays.asList(imageID),
+                        resources,
                         reporterEmailEditText.getText().toString(),
                         descriptionEditText.getText().toString(),
                         0
@@ -392,6 +424,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
+                MainActivity.this.imageFile = imageFile;
                 Glide.with(MainActivity.this).load(imageFile).into(ivImage);
             }
 
