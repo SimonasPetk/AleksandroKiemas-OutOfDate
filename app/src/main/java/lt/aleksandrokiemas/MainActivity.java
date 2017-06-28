@@ -2,22 +2,15 @@ package lt.aleksandrokiemas;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -49,7 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import butterknife.OnClick;
+import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class MainActivity extends Activity {
@@ -82,7 +75,7 @@ public class MainActivity extends Activity {
 
         btnSelect = (FrameLayout) findViewById(R.id.load_photo);
 
-        this.ivImage = (ImageView) findViewById(R.id.image_placeholder);
+        ivImage = (ImageView) findViewById(R.id.image_placeholder);
         problemAddressField = (EditText) findViewById(R.id.problem_address);
 
         problemAddressField.setOnClickListener(new OnClickListener() {
@@ -117,9 +110,8 @@ public class MainActivity extends Activity {
                 description = descriptionField.getText().toString();
 
 
-
                 boolean hasDrawable = (ivImage.getDrawable() != null);
-                if(hasDrawable) {
+                if (hasDrawable) {
                     // imageView has image in it
                     photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
 
@@ -132,13 +124,12 @@ public class MainActivity extends Activity {
                             e.printStackTrace();
                         }
                     }
-                }
-                else {
+                } else {
                     // no image assigned to image view
-                        Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
                 }
 
-                    // Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
 
 
             }
@@ -147,7 +138,6 @@ public class MainActivity extends Activity {
         context = getApplicationContext();
 
     }
-
 
 
     private class AsyncSendImage extends AsyncTask<String, Void, String> {
@@ -343,13 +333,30 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_FILE)
-                onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                ivImage.setImageBitmap(photo);
-            }
+            if (requestCode == 0)
+                EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+                    @Override
+                    public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                        //Some error handling
+                        e.printStackTrace();
+                    }
 
+                    @Override
+                    public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                        ivImage.setImageBitmap(bitmap);
+                    }
+
+
+                    @Override
+                    public void onCanceled(EasyImage.ImageSource source, int type) {
+                        //Cancel handling, you might wanna remove taken photo if it was canceled
+                        if (source == EasyImage.ImageSource.CAMERA) {
+                            File photoFile = EasyImage.lastlyTakenButCanceledPhoto(MainActivity.this);
+                            if (photoFile != null) photoFile.delete();
+                        }
+                    }
+                });
             else if (requestCode == PLACE_PICKER_REQUEST)
                 openPlacePicker(data);
         }
@@ -357,7 +364,8 @@ public class MainActivity extends Activity {
 
     }
 
-    @Override
+
+   /* @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
@@ -371,117 +379,13 @@ public class MainActivity extends Activity {
                 }
                 break;
         }
-    }
+    } */
 
-    @SuppressWarnings("deprecation")
-    private void onSelectFromGalleryResult(Intent data) {
-
-        Bitmap bm = null;
-        if (data != null) {
-            try {
-                bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        ivImage.setImageBitmap(bm);
-    }
 
     private void selectImage() {
-        final CharSequence[] items = {"Fotografuoti", "Pasirinkti iš galerijos",
-                "Išeiti"};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Pridėkite nuotrauką!");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                boolean result = Utility.checkPermission(MainActivity.this);
-
-                if (items[item].equals("Fotografuoti")) {
-                    userChoosenTask = "Fotografuoti";
-                    if (result)
-                        cameraIntent();
-
-                } else if (items[item].equals("Pasirinkti iš galerijos")) {
-                    userChoosenTask = "Pasirinkti iš galerijos";
-                    if (result)
-                        galleryIntent();
-
-                } else if (items[item].equals("Išeiti")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
+        EasyImage.openChooserWithGallery(this, "Pasirinkite įkėlimo būdą", 0);
     }
-
-
-    private void galleryIntent() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);//
-        startActivityForResult(Intent.createChooser(intent, "Pasirinkti nuotrauką"), SELECT_FILE);
-    }
-
-    private void cameraIntent() {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, REQUEST_CAMERA);
-}
-
-
-   /* private void onCaptureImageResult(Intent data) {
-
-        Cursor cursor = MainActivity.this.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{
-                        MediaStore.Images.Media.DATA,
-                        MediaStore.Images.Media.DATE_ADDED,
-                        MediaStore.Images.ImageColumns.ORIENTATION
-                },
-                MediaStore.Images.Media.DATE_ADDED,
-                null,
-                "date_added DESC");
-
-        Bitmap fullsize = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            Uri uri = Uri.parse(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
-            String photoPath = uri.toString();
-            cursor.close();
-            if (photoPath != null) {
-                System.out.println("path: " + photoPath); //path from image full size
-                fullsize = decodeSampledBitmap(photoPath);//here is the bitmap of image full size
-            }
-        }
-
-        **
-         * Jeigu nori siųsti tik thumbnail.
-         *
-         * /Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-         thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-
-         File destination = new File(Environment.getExternalStorageDirectory(),
-         System.currentTimeMillis() + ".jpg");
-
-         FileOutputStream fo;
-         try {
-         destination.createNewFile();
-         fo = new FileOutputStream(destination);
-         fo.write(bytes.toByteArray());
-         fo.close();
-         } catch (FileNotFoundException e) {
-         e.printStackTrace();
-         } catch (IOException e) {
-         e.printStackTrace();
-         }
-         *
-
-        ivImage.setImageBitmap(fullsize);
-    }
-
-    */
 
 
     /**
@@ -525,58 +429,6 @@ public class MainActivity extends Activity {
 
 
     }
-
-
-    private int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-
-    private Bitmap decodeSampledBitmap(String pathName,
-                                       int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(pathName, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(pathName, options);
-    }
-
-    //I added this to have a good approximation of the screen size:
-    private Bitmap decodeSampledBitmap(String pathName) {
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-        return decodeSampledBitmap(pathName, width, height);
-    }
-
 
 
 }
