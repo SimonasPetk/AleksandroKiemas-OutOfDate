@@ -14,12 +14,12 @@ import retrofit2.http.Part;
  * Created by Simonas Petkevičius on 2017-06-28.
  */
 
-interface Service {
+interface ApiService {
     @Multipart
     @POST("/resources")
     Call<ImageUploadResponse> postImage(@Part MultipartBody.Part image);
 
     @POST("/issues")
-    Call<ResponseBody> postData(@Field("resources") String[] resource, @Field("reporter_email") String emailAddress, @Field("comment") String last);
+    Call<IssueRequest> postData(@Field("resources") String[] resources,@Field("comment") String last, @Field("reporter_email") String reporterEmail);
 }
 

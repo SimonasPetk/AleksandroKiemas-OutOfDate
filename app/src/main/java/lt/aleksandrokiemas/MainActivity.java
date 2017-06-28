@@ -34,7 +34,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
-import
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,6 +49,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
 import pl.tajchert.nammu.PermissionCallback;
 import retrofit2.Retrofit;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 
 public class MainActivity extends Activity {
@@ -70,7 +71,7 @@ public class MainActivity extends Activity {
     String problemAddress, emailAddress, description;
     Button btnPost;
 
-    Service service;
+    ApiService service;
 
     static Bitmap photo;
     static String imageID;
@@ -87,16 +88,13 @@ public class MainActivity extends Activity {
         context = getApplicationContext();
         Nammu.init(getApplicationContext());
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
 
         // Change base URL to your upload server URL.
         service = new Retrofit.Builder().baseUrl("http://opendata.dashboard.lt/api/v1")
                 .addConverterFactory(MoshiConverterFactory.create())
-                .client(client)
                 .build()
-                .create(Service.class);
+                .create(ApiService.class);
 
         btnSelect = (FrameLayout) findViewById(R.id.load_photo);
         btnPost = (Button) findViewById(R.id.btnPost);
@@ -145,9 +143,7 @@ public class MainActivity extends Activity {
                     photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
 
                     if (photo != null) {
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        new AsyncSendImage().execute("http://opendata.dashboard.lt/api/v1/resources");
 
                     } else {
                         try {
