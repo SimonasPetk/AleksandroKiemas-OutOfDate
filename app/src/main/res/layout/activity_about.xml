@@ -60,7 +60,6 @@
                 android:onClick="openEmail" />
 
             <ImageView
-                android:id="@+id/instagram"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignEnd="@+id/email"

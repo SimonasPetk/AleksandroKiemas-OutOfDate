@@ -17,7 +17,6 @@
 
 
     <FrameLayout
-        android:id="@+id/cleaning"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center"
@@ -41,7 +40,6 @@
 
 
     <FrameLayout
-        android:id="@+id/invites"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center"
@@ -65,7 +63,6 @@
 
 
     <FrameLayout
-        android:id="@+id/asks"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center"
