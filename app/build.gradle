@@ -43,9 +43,13 @@ dependencies {
     compile 'com.github.tajchert:nammu:1.1.3'
     testCompile 'junit:junit:4.12'
     compile 'com.github.bumptech.glide:glide:3.8.0'
+<<<<<<< HEAD
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+=======
+
+>>>>>>> 2f9d10d9df130e5f5c5554b792ad1ab29d097393
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
