@@ -14,10 +14,8 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -51,6 +49,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import butterknife.OnClick;
+import pl.aprilapps.easyphotopicker.EasyImage;
+
 public class MainActivity extends Activity {
 
     private static int RESULT_LOAD_IMG = 1;
@@ -74,7 +75,6 @@ public class MainActivity extends Activity {
 
     Details details;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +82,7 @@ public class MainActivity extends Activity {
 
         btnSelect = (FrameLayout) findViewById(R.id.load_photo);
 
-        ivImage = (ImageView) findViewById(R.id.image_placeholder);
+        this.ivImage = (ImageView) findViewById(R.id.image_placeholder);
         problemAddressField = (EditText) findViewById(R.id.problem_address);
 
         problemAddressField.setOnClickListener(new OnClickListener() {
@@ -100,11 +100,10 @@ public class MainActivity extends Activity {
 
         btnSelect.setOnClickListener(new OnClickListener() {
 
-
-
             @Override
             public void onClick(View v) {
                 selectImage();
+
             }
         });
 
@@ -118,8 +117,9 @@ public class MainActivity extends Activity {
                 description = descriptionField.getText().toString();
 
 
+
                 boolean hasDrawable = (ivImage.getDrawable() != null);
-                if (hasDrawable) {
+                if(hasDrawable) {
                     // imageView has image in it
                     photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
 
@@ -132,27 +132,23 @@ public class MainActivity extends Activity {
                             e.printStackTrace();
                         }
                     }
-                } else {
+                }
+                else {
                     // no image assigned to image view
-                    Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
                 }
 
-                // Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
 
 
             }
         });
 
-        if (checkSelfPermission(android.Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{android.Manifest.permission.CAMERA},
-                    1);
-        }
-
-
         context = getApplicationContext();
 
     }
+
+
 
     private class AsyncSendImage extends AsyncTask<String, Void, String> {
         @Override
@@ -349,8 +345,11 @@ public class MainActivity extends Activity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA)
-                onCaptureImageResult(data);
+            else if (requestCode == REQUEST_CAMERA) {
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                ivImage.setImageBitmap(photo);
+            }
+
             else if (requestCode == PLACE_PICKER_REQUEST)
                 openPlacePicker(data);
         }
@@ -370,16 +369,6 @@ public class MainActivity extends Activity {
                 } else {
                     //code for deny
                 }
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (userChoosenTask.equals("Fotografuoti"))
-                        cameraIntent();
-                    else if (userChoosenTask.equals("Pasirinkti iš galerijos"))
-                        galleryIntent();
-                } else {
-                    //code for deny
-                }
-
                 break;
         }
     }
@@ -410,7 +399,6 @@ public class MainActivity extends Activity {
             public void onClick(DialogInterface dialog, int item) {
                 boolean result = Utility.checkPermission(MainActivity.this);
 
-
                 if (items[item].equals("Fotografuoti")) {
                     userChoosenTask = "Fotografuoti";
                     if (result)
@@ -438,12 +426,12 @@ public class MainActivity extends Activity {
     }
 
     private void cameraIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
-    }
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_CAMERA);
+}
 
 
-    private void onCaptureImageResult(Intent data) {
+   /* private void onCaptureImageResult(Intent data) {
 
         Cursor cursor = MainActivity.this.getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -467,7 +455,7 @@ public class MainActivity extends Activity {
             }
         }
 
-        /**
+        **
          * Jeigu nori siųsti tik thumbnail.
          *
          * /Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
@@ -487,10 +475,13 @@ public class MainActivity extends Activity {
          e.printStackTrace();
          } catch (IOException e) {
          e.printStackTrace();
-         }*/
+         }
+         *
 
         ivImage.setImageBitmap(fullsize);
     }
+
+    */
 
 
     /**
@@ -585,6 +576,7 @@ public class MainActivity extends Activity {
         int height = size.y;
         return decodeSampledBitmap(pathName, width, height);
     }
+
 
 
 }
