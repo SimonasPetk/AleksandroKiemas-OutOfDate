@@ -1,6 +1,6 @@
 package lt.aleksandrokiemas;
 
-
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,18 +46,20 @@ import java.io.InputStreamReader;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
+import pl.tajchert.nammu.Nammu;
+import pl.tajchert.nammu.PermissionCallback;
+
+import static android.R.attr.permission;
 
 public class MainActivity extends Activity {
 
-    private static int RESULT_LOAD_IMG = 1;
-    private String imgDecodableString;
-    private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
+
     private FrameLayout btnSelect;
     private ImageView ivImage;
     private String userChoosenTask, name, address;
     private EditText problemAddressField;
     int PLACE_PICKER_REQUEST = 2;
-
+    private long mLastClickTime = 0;
 
     EditText emailAddressField, descriptionField;
     String problemAddress, emailAddress, description;
@@ -81,6 +85,12 @@ public class MainActivity extends Activity {
         problemAddressField.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
                 createPicker();
             }
         });
@@ -91,7 +101,7 @@ public class MainActivity extends Activity {
         btnPost = (Button) findViewById(R.id.btnPost);
 
 
-        btnSelect.setOnClickListener(new OnClickListener() {
+         btnSelect.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -331,33 +341,32 @@ public class MainActivity extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                //Some error handling
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
+                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                ivImage.setImageBitmap(bitmap);
+            }
+
+
+            @Override
+            public void onCanceled(EasyImage.ImageSource source, int type) {
+                //Cancel handling, you might wanna remove taken photo if it was canceled
+                if (source == EasyImage.ImageSource.CAMERA) {
+                    File photoFile = EasyImage.lastlyTakenButCanceledPhoto(MainActivity.this);
+                    if (photoFile != null) photoFile.delete();
+                }
+            }
+        });
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 0)
-                EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
-                    @Override
-                    public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
-                        //Some error handling
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
-                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                        ivImage.setImageBitmap(bitmap);
-                    }
-
-
-                    @Override
-                    public void onCanceled(EasyImage.ImageSource source, int type) {
-                        //Cancel handling, you might wanna remove taken photo if it was canceled
-                        if (source == EasyImage.ImageSource.CAMERA) {
-                            File photoFile = EasyImage.lastlyTakenButCanceledPhoto(MainActivity.this);
-                            if (photoFile != null) photoFile.delete();
-                        }
-                    }
-                });
-            else if (requestCode == PLACE_PICKER_REQUEST)
+            if (requestCode == PLACE_PICKER_REQUEST)
                 openPlacePicker(data);
         }
 
@@ -365,26 +374,34 @@ public class MainActivity extends Activity {
     }
 
 
-   /* @Override
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (userChoosenTask.equals("Fotografuoti"))
-                        cameraIntent();
-                    else if (userChoosenTask.equals("Pasirinkti iš galerijos"))
-                        galleryIntent();
-                } else {
-                    //code for deny
-                }
-                break;
-        }
-    } */
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
 
 
     private void selectImage() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            EasyImage.openChooserWithGallery(this, "Pasirinkite įkėlimo būdą", 0);
+        } else {
+            Nammu.askForPermission(this, Manifest.permission.CAMERA, new PermissionCallback() {
+                @Override
+                public void permissionGranted() {
+                    selectImage();
+                }
 
-        EasyImage.openChooserWithGallery(this, "Pasirinkite įkėlimo būdą", 0);
+                @Override
+                public void permissionRefused() {
+                    finish();
+                }
+            });
+        }
+
+
     }
 
 
