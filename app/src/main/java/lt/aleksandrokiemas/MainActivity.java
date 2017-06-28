@@ -42,19 +42,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.List;
 
+import okhttp3.ResponseBody;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
 import pl.tajchert.nammu.PermissionCallback;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 
 public class MainActivity extends Activity {
 
-    List<String> resources = Arrays.asList(imageID);
+    String[] resources = null;
     String[] PERMISSIONS = new String[]{
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -63,11 +66,11 @@ public class MainActivity extends Activity {
     private FrameLayout btnSelect;
     private ImageView ivImage;
     private String userChoosenTask, name, address;
-    private EditText lat;
+    private EditText addressEditText;
     int PLACE_PICKER_REQUEST = 2;
     private long mLastClickTime = 0;
 
-    EditText reporterEmail, comment;
+    EditText reporterEmailEditText, descriptionEditText;
     String problemAddress, emailAddress, description;
     Button btnPost;
 
@@ -75,7 +78,7 @@ public class MainActivity extends Activity {
 
     static Bitmap photo;
     static String imageID;
-    static private Context context;
+    private Context context;
 
 
     Details details;
@@ -89,8 +92,9 @@ public class MainActivity extends Activity {
         Nammu.init(getApplicationContext());
 
 
+
         // Change base URL to your upload server URL.
-        service = new Retrofit.Builder().baseUrl("http://opendata.dashboard.lt/api/v1")
+        service = new Retrofit.Builder().baseUrl("http://opendata.dashboard.lt/api/v1/")
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
                 .create(ApiService.class);
@@ -99,12 +103,13 @@ public class MainActivity extends Activity {
         btnPost = (Button) findViewById(R.id.btnPost);
 
         ivImage = (ImageView) findViewById(R.id.image_placeholder);
-        lat = (EditText) findViewById(R.id.problem_address);
-        reporterEmail = (EditText) findViewById(R.id.email_address_field);
-        comment = (EditText) findViewById(R.id.description_field);
+        addressEditText = (EditText) findViewById(R.id.problem_address);
+        reporterEmailEditText = (EditText) findViewById(R.id.email_address_field);
+        descriptionEditText = (EditText) findViewById(R.id.description_field);
 
 
-        lat.setOnClickListener(new OnClickListener() {
+
+        addressEditText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -133,14 +138,30 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
                 IssueRequest issuerequest = new IssueRequest(
-                        resources,
-                        reporterEmail.getText().toString(),
-                        comment.getText().toString(),
-                        lat.getText().toString()
+                        Arrays.asList(imageID),
+                        reporterEmailEditText.getText().toString(),
+                        descriptionEditText.getText().toString(),
+                        0
                 );
 
+               service.createIssue(issuerequest).enqueue(new Callback<ResponseBody>() {
+                   @Override
+                   public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                boolean hasDrawable = (ivImage.getDrawable() != null);
+                       Toast.makeText(getBaseContext(), "Pranešimas nusiųstas!", Toast.LENGTH_LONG).show();
+
+                   }
+
+                   @Override
+                   public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                       Toast.makeText(getBaseContext(), "Pranešimo nusiųsti nepavyko...", Toast.LENGTH_LONG).show();
+
+                   }
+               });
+
+
+              /*  boolean hasDrawable = (ivImage.getDrawable() != null);
                 if (hasDrawable) {
                     // imageView has image in it
                     photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
@@ -162,12 +183,13 @@ public class MainActivity extends Activity {
 
                 // Toast.makeText(getBaseContext(), "Neįkėlete nuotraukos!", Toast.LENGTH_LONG).show();
 
-
+                */
             }
         });
 
 
     }
+
 
 
     private class AsyncSendImage extends AsyncTask<String, Void, String> {
@@ -193,7 +215,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public static String POST_IMAGE(String url, Bitmap bitmap) {
+    public String POST_IMAGE(String url, Bitmap bitmap) {
         InputStream inputStream = null;
         String result = "";
         try {
@@ -206,7 +228,7 @@ public class MainActivity extends Activity {
 
             // 3. set json to StringEntity
 
-            File file = new File(context.getFilesDir(), "image.jpg");
+            File file = new File(MainActivity.this.getFilesDir(), "image.jpg");
             FileOutputStream fileos = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileos);
 
@@ -304,9 +326,9 @@ public class MainActivity extends Activity {
             json += "\"],\"";
             json += "reporter_email\":\"";
             json += details.getEmailAddress();
-            json += "\",\"comment\":\"";
+            json += "\",\"descriptionEditText\":\"";
             json += details.getDescription();
-            json += "\",\"lat\":\"";
+            json += "\",\"addressEditText\":\"";
             json += "0";
             json += "\"}";
 
@@ -445,7 +467,7 @@ public class MainActivity extends Activity {
         String locations = null;
 
 
-        lat.setText(address);
+        addressEditText.setText(address);
 
         //problemAddressField.setText(name);
         //Toast.makeText(getBaseContext(),  data, Toast.LENGTH_LONG).show();

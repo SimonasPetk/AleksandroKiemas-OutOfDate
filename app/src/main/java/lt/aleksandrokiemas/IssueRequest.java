@@ -17,9 +17,9 @@ class IssueRequest{
 
     private String comment;
 
-    private String lat;
+    private int lat;
 
-    public IssueRequest(List<String> resources, String reporterEmail, String comment, String lat) {
+    public IssueRequest(List<String> resources, String reporterEmail, String comment, int lat) {
         super();
         this.resources = resources;
         this.reporterEmail = reporterEmail;
