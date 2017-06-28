@@ -50,10 +50,7 @@ import pl.tajchert.nammu.Nammu;
 import pl.tajchert.nammu.PermissionCallback;
 import retrofit2.Retrofit;
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 2f9d10d9df130e5f5c5554b792ad1ab29d097393
 public class MainActivity extends Activity {
 
 
