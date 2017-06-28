@@ -46,7 +46,7 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_alignStart="@id/email"
+                android:layout_alignStart="@+id/email"
                 android:layout_marginStart="70dp"
                 android:background="@drawable/facebook"
                 android:onClick="openFacebook" />
