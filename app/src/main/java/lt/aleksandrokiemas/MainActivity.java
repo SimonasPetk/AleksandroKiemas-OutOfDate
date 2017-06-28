@@ -3,6 +3,7 @@ package lt.aleksandrokiemas;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -108,26 +109,8 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-
-
                 if (imageFile != null) {
-
-                    MultipartBody.Part body =
-                            MultipartBody.Part.createFormData("file", imageFile.getName(), RequestBody.create(MediaType.parse("image"), imageFile));
-
-                    service.createImage(body).enqueue(new Callback<ImageUploadResponse>() {
-                        @Override
-                        public void onResponse(Call<ImageUploadResponse> call, Response<ImageUploadResponse> response) {
-
-                            createIssue(response.body().getId());
-                        }
-
-                        @Override
-                        public void onFailure(Call<ImageUploadResponse> call, Throwable t) {
-
-                            Toast.makeText(getBaseContext(), "Nepavyko įkelti nuotraukos...", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    new CreateImageAsyncTask().execute();
                 } else {
                     createIssue(null);
                 }
@@ -242,5 +225,36 @@ public class MainActivity extends Activity {
         final CharSequence address = place.getAddress();
 
         addressEditText.setText(address);
+    }
+
+    private class CreateImageAsyncTask extends AsyncTask<Void, Void, byte[]> {
+
+        @Override
+        protected byte[] doInBackground(Void... voids) {
+
+            return ImageUtils.compressImageFile(MainActivity.this, imageFile);
+        }
+
+        @Override
+        protected void onPostExecute(byte[] bytes) {
+            MultipartBody.Part body =
+                    MultipartBody.Part.createFormData("file", imageFile.getName(), RequestBody.create(MediaType.parse("image"), bytes));
+
+
+
+            service.createImage(body).enqueue(new Callback<ImageUploadResponse>() {
+                @Override
+                public void onResponse(Call<ImageUploadResponse> call, Response<ImageUploadResponse> response) {
+
+                    createIssue(response.body().getId());
+                }
+
+                @Override
+                public void onFailure(Call<ImageUploadResponse> call, Throwable t) {
+
+                    Toast.makeText(getBaseContext(), "Nepavyko įkelti nuotraukos...", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 }
