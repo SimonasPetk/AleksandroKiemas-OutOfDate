@@ -1,10 +1,13 @@
 package lt.aleksandrokiemas;
 
+import android.content.res.Resources;
+
 import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -20,7 +23,6 @@ interface ApiService {
     Call<ImageUploadResponse> postImage(@Part MultipartBody.Part image);
 
     @POST("/issues")
-    Call<ResponseBody> postData(@Field("resources") String[] resources, @Field("reporter_email") String reporterEmail, @Field("comment") String last);
+    Call<ResponseBody> postData(@Body IssueRequest postBody);
 }
 
-    
