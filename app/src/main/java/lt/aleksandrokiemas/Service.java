@@ -20,6 +20,7 @@ interface ApiService {
     Call<ImageUploadResponse> postImage(@Part MultipartBody.Part image);
 
     @POST("/issues")
-    Call<IssueRequest> postData(@Field("resources") String[] resources,@Field("comment") String last, @Field("reporter_email") String reporterEmail);
+    Call<ResponseBody> postData(@Field("resources") String[] resources, @Field("reporter_email") String reporterEmail, @Field("comment") String last);
 }
 
+    
