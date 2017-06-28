@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
 
     static Bitmap photo;
     static String imageID;
-    private Context context;
+    static private Context context;
 
 
     Details details;
