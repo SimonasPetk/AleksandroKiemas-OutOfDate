@@ -45,10 +45,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
 import pl.tajchert.nammu.PermissionCallback;
+import retrofit2.Retrofit;
 
 
 public class MainActivity extends Activity {
@@ -70,6 +73,8 @@ public class MainActivity extends Activity {
     String problemAddress, emailAddress, description;
     Button btnPost;
 
+    Service service;
+
     static Bitmap photo;
     static String imageID;
     private static Context context;
@@ -82,10 +87,23 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = getApplicationContext();
+        Nammu.init(getApplicationContext());
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        // Change base URL to your upload server URL.
+        service = new Retrofit.Builder().baseUrl("http://opendata.dashboard.lt/api/v1/resources").client(client).build().create(Service.class);
+
         btnSelect = (FrameLayout) findViewById(R.id.load_photo);
+        btnPost = (Button) findViewById(R.id.btnPost);
 
         ivImage = (ImageView) findViewById(R.id.image_placeholder);
         problemAddressField = (EditText) findViewById(R.id.problem_address);
+        emailAddressField = (EditText) findViewById(R.id.email_address_field);
+        descriptionField = (EditText) findViewById(R.id.description_field);
 
         problemAddressField.setOnClickListener(new OnClickListener() {
             @Override
@@ -99,11 +117,6 @@ public class MainActivity extends Activity {
                 createPicker();
             }
         });
-
-
-        emailAddressField = (EditText) findViewById(R.id.email_address_field);
-        descriptionField = (EditText) findViewById(R.id.description_field);
-        btnPost = (Button) findViewById(R.id.btnPost);
 
 
         btnSelect.setOnClickListener(new OnClickListener() {
@@ -131,7 +144,10 @@ public class MainActivity extends Activity {
                     photo = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
 
                     if (photo != null) {
-                        new AsyncSendImage().execute("http://opendata.dashboard.lt/api/v1/resources");
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+
                     } else {
                         try {
                             throw new RuntimeException("Viskas čia yra blogai...");
@@ -150,11 +166,10 @@ public class MainActivity extends Activity {
             }
         });
 
-        context = getApplicationContext();
-        Nammu.init(getApplicationContext());
 
     }
 
+    
 
     private class AsyncSendImage extends AsyncTask<String, Void, String> {
         @Override
