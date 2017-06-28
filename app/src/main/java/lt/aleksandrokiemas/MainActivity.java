@@ -34,7 +34,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -92,7 +92,11 @@ public class MainActivity extends Activity {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         // Change base URL to your upload server URL.
-        service = new Retrofit.Builder().baseUrl("http://opendata.dashboard.lt/api/v1/resources").client(client).build().create(Service.class);
+        service = new Retrofit.Builder().baseUrl("http://opendata.dashboard.lt/api/v1")
+                .addConverterFactory(MoshiConverterFactory.create())
+                .client(client)
+                .build()
+                .create(Service.class);
 
         btnSelect = (FrameLayout) findViewById(R.id.load_photo);
         btnPost = (Button) findViewById(R.id.btnPost);

@@ -16,37 +16,10 @@ import retrofit2.http.Part;
 
 interface Service {
     @Multipart
-    @POST("/Resources")
+    @POST("/resources")
     Call<ImageUploadResponse> postImage(@Part MultipartBody.Part image);
 
     @POST("/issues")
     Call<ResponseBody> postData(@Field("resources") String[] resource, @Field("reporter_email") String emailAddress, @Field("comment") String last);
 }
 
-class ImageUploadResponse {
-    private String id;
-
-    public String getId() {
-        return id;
-    }
-}
-
-class IssueRequest{
-
-    private List<String> resources;
-
-    private String reporterEmail;
-
-    private String comment;
-
-    private String lat;
-
-    public IssueRequest(List<String> resources, String reporterEmail, String comment, String lat) {
-        super();
-        this.resources = resources;
-        this.reporterEmail = reporterEmail;
-        this.comment = comment;
-        this.lat = lat;
-    }
-
-}
