@@ -17,14 +17,20 @@ class IssueRequest{
 
     private String comment;
 
-    private int lat;
+    private String address;
 
-    public IssueRequest(List<String> resources, String reporterEmail, String comment, int lat) {
+    private double lat;
+
+    private double lon;
+
+    public IssueRequest(List<String> resources, String reporterEmail, String comment, String address, double lat, double lon) {
         super();
         this.resources = resources;
         this.reporterEmail = reporterEmail;
         this.comment = comment;
+        this.address = address;
         this.lat = lat;
+        this.lon = lon;
     }
 
 }

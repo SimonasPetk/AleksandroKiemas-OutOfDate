@@ -56,6 +56,7 @@ public class MainActivity extends Activity {
     private EditText addressEditText;
     private long mLastClickTime = 0;
     private File imageFile;
+    double latitude, longitude;
 
 
 
@@ -128,8 +129,10 @@ public class MainActivity extends Activity {
         IssueRequest issuerequest = new IssueRequest(
                 resources,
                 reporterEmailEditText.getText().toString(),
-                descriptionEditText.getText().toString(),
-                0
+                addressEditText.getText().toString()+"\n"+descriptionEditText.getText().toString(),
+                addressEditText.getText().toString(),
+                latitude,
+                longitude
         );
 
         service.createIssue(issuerequest).enqueue(new Callback<ResponseBody>() {
@@ -225,6 +228,9 @@ public class MainActivity extends Activity {
         final CharSequence address = place.getAddress();
 
         addressEditText.setText(address);
+        latitude = place.getLatLng().latitude;
+        longitude = place.getLatLng().longitude;
+
     }
 
     private class CreateImageAsyncTask extends AsyncTask<Void, Void, byte[]> {
