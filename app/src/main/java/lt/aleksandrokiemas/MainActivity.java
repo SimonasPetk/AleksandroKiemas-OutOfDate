@@ -111,8 +111,12 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (imageFile != null) {
+                    Toast.makeText(getBaseContext(), "Pranešimas siunčiamas. Prašome palaukti.", Toast.LENGTH_SHORT).show();
+
                     new CreateImageAsyncTask().execute();
                 } else {
+                    Toast.makeText(getBaseContext(), "Pranešimas siunčiamas. Prašome palaukti.", Toast.LENGTH_SHORT).show();
+
                     createIssue(null);
                 }
             }
