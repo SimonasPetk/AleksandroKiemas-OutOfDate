@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -59,7 +60,6 @@ public class MainActivity extends Activity {
     double latitude, longitude;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,14 +110,18 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                if (imageFile != null) {
-                    Toast.makeText(getBaseContext(), "Pranešimas siunčiamas. Prašome palaukti.", Toast.LENGTH_SHORT).show();
-
-                    new CreateImageAsyncTask().execute();
+                if (TextUtils.isEmpty(descriptionEditText.getText().toString())) {
+                    descriptionEditText.setError("Užmiršote aprašyti problemą.");
                 } else {
-                    Toast.makeText(getBaseContext(), "Pranešimas siunčiamas. Prašome palaukti.", Toast.LENGTH_SHORT).show();
+                    if (imageFile != null) {
+                        Toast.makeText(getBaseContext(), "Pranešimas siunčiamas. Prašome palaukti.", Toast.LENGTH_SHORT).show();
 
-                    createIssue(null);
+                        new CreateImageAsyncTask().execute();
+                    } else {
+                        Toast.makeText(getBaseContext(), "Pranešimas siunčiamas. Prašome palaukti.", Toast.LENGTH_SHORT).show();
+
+                        createIssue(null);
+                    }
                 }
             }
         });
@@ -129,11 +133,10 @@ public class MainActivity extends Activity {
         if (imageID != null) {
             resources = Arrays.asList(imageID);
         }
-
         IssueRequest issuerequest = new IssueRequest(
                 resources,
                 reporterEmailEditText.getText().toString(),
-                addressEditText.getText().toString()+"\n"+descriptionEditText.getText().toString(),
+                addressEditText.getText().toString() + "\n" + descriptionEditText.getText().toString(),
                 addressEditText.getText().toString(),
                 latitude,
                 longitude
@@ -249,7 +252,6 @@ public class MainActivity extends Activity {
         protected void onPostExecute(byte[] bytes) {
             MultipartBody.Part body =
                     MultipartBody.Part.createFormData("file", imageFile.getName(), RequestBody.create(MediaType.parse("image"), bytes));
-
 
 
             service.createImage(body).enqueue(new Callback<ImageUploadResponse>() {

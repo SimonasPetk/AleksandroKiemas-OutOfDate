@@ -3,7 +3,6 @@ package lt.aleksandrokiemas;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -53,7 +52,7 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     public void openInvite(View view) {
-        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.facebook.com/Visit-Panevezys-886397051475920/"));
+        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.kulturapanevezys.lt/"));
         startActivity(intent);
     }
 
