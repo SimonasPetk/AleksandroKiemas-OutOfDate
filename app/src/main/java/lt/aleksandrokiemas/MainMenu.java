@@ -37,7 +37,7 @@ public class MainMenu extends AppCompatActivity {
 
 
     public void openMap(View view) {
-        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.google.com/maps/d/u/0/viewer?mid=1FZbf1x4LEe514_WMNo2ePvJLn9I&ll=55.44853640706444%2C23.594292999999993&z=9"));
+        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.google.com/maps/d/u/0/viewer?mid=1hdnBu9hOkbDMp8mnd-vYsU35h2ARU6Oh&ll=55.72974421848126%2C24.353857136346505&z=13"));
         startActivity(intent);
     }
 

@@ -52,7 +52,7 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     public void openInvite(View view) {
-        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.kulturapanevezys.lt/"));
+        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://panevezyje.info/renginiai/"));
         startActivity(intent);
     }
 
