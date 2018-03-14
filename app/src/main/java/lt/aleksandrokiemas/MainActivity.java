@@ -24,6 +24,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -58,6 +59,7 @@ public class MainActivity extends Activity {
     private long mLastClickTime = 0;
     private File imageFile;
     double latitude, longitude;
+    String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
 
     @Override
@@ -136,7 +138,7 @@ public class MainActivity extends Activity {
         IssueRequest issuerequest = new IssueRequest(
                 resources,
                 reporterEmailEditText.getText().toString(),
-                addressEditText.getText().toString() + "\n" + descriptionEditText.getText().toString(),
+                addressEditText.getText().toString() + "\n" + descriptionEditText.getText().toString() + "\n" + mydate,
                 addressEditText.getText().toString(),
                 latitude,
                 longitude
